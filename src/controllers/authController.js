@@ -14,9 +14,11 @@ import { generateResetPasswordTemplate } from "../utils/generateResetPasswordTem
 // import { generateVerifyEmailToken } from "../utils/generateVerifyEmailToken.js";
 
 export const signup = catchAsync(async (req, res, next) => {
+  console.log("signup");
   const { name, email, password } = req.body;
   // check if user exists in db already with email address provided in req.body return response with user already exists
   let user = await User.findOne({ email });
+  console.log(user);
   if (user) {
     return res.status(403).json({
       status: "fail",
@@ -25,7 +27,6 @@ export const signup = catchAsync(async (req, res, next) => {
   }
   // create new user
   const hashedPassword = await hashPassword(password);
-  console.log(hashedPassword);
   user = await User.create({
     name,
     email,
@@ -34,7 +35,6 @@ export const signup = catchAsync(async (req, res, next) => {
   const token = generateToken(user._id);
   sendToken(user, 201, res, token);
 });
-
 export const login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
   // check if email and password exsist
@@ -90,7 +90,6 @@ export const forgotPassword = catchAsync(async (req, res, next) => {
     );
   }
 });
-
 export const resetPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on the token
   const hashedToken = crypto

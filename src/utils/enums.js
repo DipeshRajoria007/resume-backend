@@ -1,4 +1,3 @@
-// enums.js
 export const AppTypeEnum = Object.freeze({
   FAST_ECOMMERCE: "fast_ecommerce",
   ECOMMERCE: "ecommerce",

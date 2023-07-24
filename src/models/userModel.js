@@ -3,14 +3,8 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import { hashPassword } from "../utils/hashPassword.js";
 import crypto from "crypto";
+import { AppTypeEnum } from "../utils/enums.js";
 
-const AppTypeEnum = Object.freeze({
-  FAST_ECOMMERCE: "fast_ecommerce",
-  ECOMMERCE: "ecommerce",
-  COMMUNITY: "community",
-  SOCIAL_MEDIA: "social_media",
-  BOOKING: "booking",
-});
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -79,6 +73,10 @@ const UserSchema = new mongoose.Schema({
     expirationDate: String,
     cvv: Number,
   },
+  isDeleted: {
+    type: Boolean,
+    default: false,
+  },
 });
 UserSchema.methods.comparePassword = async function (
   plainPassword,
@@ -106,5 +104,9 @@ UserSchema.methods.createPasswordRandomToken = async function () {
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
   return resetToken;
 };
+UserSchema.pre(/^find/, function (next) {
+  this.find({ isDeleted: false });
+  next();
+});
 const User = mongoose.model("User", UserSchema);
 export default User;

@@ -9,7 +9,3 @@ export const sendToken = (user, statusCode, res, token) => {
     },
   });
 };
-//   const { email, password } = req.body;
-//   if (!email || !password) {
-//     return next(new AppError("Please provide email and password", 400));
-//   }

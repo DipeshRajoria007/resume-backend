@@ -1,6 +1,5 @@
-import JWT from "jsonwebtoken";
-
 // generateResetPasswordTemplate
+
 export const generateResetPasswordTemplate = (resetURL) => {
   return `
   <div style="font-family: sans-serif; padding: 1rem; margin: 1rem; border: 1px solid #ccc; border-radius: 5px;">
