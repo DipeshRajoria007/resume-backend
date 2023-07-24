@@ -6,6 +6,7 @@ import cors from "cors";
 import AppError from "./utils/AppError.js";
 import globalErrorHandler from "./controllers/errorController.js";
 import router from "./middlewares/routeHandlers.js";
+import userRouter from "./routes/userRoutes.js";
 
 // Handle uncaught exceptions
 process.on("uncaughtException", (err) => {
@@ -31,6 +32,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/v1/home", (req, res) => {
   res.send("Hello World");
 });
+app.use("/api/v1/user", userRouter);
 app.use("/api/v1", router);
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
