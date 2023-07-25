@@ -4,6 +4,7 @@ import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/AppError.js";
 import { AppTypeEnum } from "../utils/enums.js";
 import { filterObj } from "../utils/filterObj.js";
+import { getOne } from "./handlerFactory.js";
 
 export const getAllUsers = catchAsync(async (req, res, next) => {
   const users = await User.find();
@@ -14,10 +15,7 @@ export const getAllUsers = catchAsync(async (req, res, next) => {
   });
 });
 
-export const getUser = catchAsync(async (req, res, next) => {
-  //getUser
-});
-// updateUser
+export const getUser = getOne(User);
 
 export const updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user tries to update their password

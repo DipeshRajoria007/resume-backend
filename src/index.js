@@ -6,12 +6,13 @@ import chalk from "chalk";
 import cors from "cors";
 import AppError from "./utils/AppError.js";
 import globalErrorHandler from "./controllers/errorController.js";
-import router from "./middlewares/routeHandlers.js";
 import userRouter from "./routes/userRoutes.js";
 import helmet from "helmet";
 import ExpressMongoSanitize from "express-mongo-sanitize";
 import xss from "xss-clean";
 import hpp from "hpp";
+import postRouter from "./routes/postRoutes.js";
+import router from "./routes/router.js";
 
 // Handle uncaught exceptions
 process.on("uncaughtException", (err) => {
@@ -61,7 +62,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use("/api/v1/user", userRouter);
-app.use("/api/v1", router);
+app.use("/api/v1/", router);
+
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });

@@ -1,5 +1,6 @@
-const mongoose = require("mongoose");
-const { AppTypeEnum } = require("../utils/enums");
+import mongoose from "mongoose";
+import { model } from "mongoose";
+import { AppTypeEnum } from "../utils/enums.js";
 
 const PostSchema = new mongoose.Schema({
   user: {
@@ -31,6 +32,12 @@ const PostSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
       },
+      replies: [
+        {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Comment",
+        },
+      ],
     },
   ],
   appType: {
@@ -43,4 +50,4 @@ const PostSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Post", PostSchema);
+export default mongoose.model("Post", PostSchema);
