@@ -1,10 +1,21 @@
 import mongoose from "mongoose";
+import { AppTypeEnum } from "../utils/enums.js";
+import { CategoryEnum } from "../utils/enums.js ";
 
 const ProductSchema = new mongoose.Schema({
   name: String,
   description: String,
   price: Number,
-  category: String,
+  appType: {
+    type: String,
+    enum: Object.values(AppTypeEnum),
+    required: [true, "Product must have an appType"],
+  },
+  category: {
+    type: String,
+    enum: Object.values(CategoryEnum),
+    required: [true, "Product must have a category"],
+  },
   images: [String],
   ratings: {
     type: Number,

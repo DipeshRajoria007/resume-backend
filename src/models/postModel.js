@@ -49,5 +49,6 @@ const PostSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+PostSchema.index({ text: "text" });
 
 export default mongoose.model("Post", PostSchema);

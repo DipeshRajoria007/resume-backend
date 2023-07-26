@@ -1,6 +1,6 @@
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/AppError.js";
-
+import APIFeatures from "../utils/apiFeatures.js";
 // Accepts a Model and returns a function that accepts a req, res, next and performs the delete operation on the Model and sends the response to the client.
 export const deleteOne = (Model) =>
   catchAsync(async (req, res, next) => {
@@ -75,20 +75,22 @@ export const getOne = (Model) =>
 // Accepts a Model and returns a function that accepts a req, res, next which returns the list of that model with relevenant appType as a response to the client.
 export const getAll = (Model) =>
   catchAsync(async (req, res, next) => {
-    const { appType } = req.params;
-    const query = Model.find({ appType });
-    const features = new APIFeatures(query, req.query)
+    const features = new APIFeatures(
+      Model.find({ appType: req.params.appType }),
+      req.query
+    )
       .filter()
       .sort()
       .limitFields()
-      .paginate();
-    const docs = await features.query;
+      .paginate()
+      .search();
 
+    const doc = await features.query;
     res.status(200).json({
       status: "success",
-      results: docs.length,
+      results: doc.length,
       data: {
-        data: docs,
+        data: doc,
       },
     });
   });
