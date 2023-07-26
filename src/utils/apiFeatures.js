@@ -29,38 +29,6 @@ export default class APIFeatures {
 
     return this;
   }
-
-  // filter() {
-  //   const queryObj = { ...this.queryString };
-  //   const excludedFields = ["page", "sort", "limit", "fields", "search"];
-  //   excludedFields.forEach((el) => delete queryObj[el]);
-
-  //   // Parse JSON filter if provided
-  //   if (queryObj.filter) {
-  //     try {
-  //       queryObj.filter = JSON.parse(queryObj.filter);
-  //     } catch (e) {
-  //       throw new Error(`Invalid JSON in filter: ${queryObj.filter}`);
-  //     }
-  //   }
-
-  //   let queryStr = JSON.stringify(queryObj);
-  //   queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-
-  //   this.query = this.query.find(JSON.parse(queryStr));
-
-  //   console.log(queryStr);
-  //   return this;
-  // }
-
-  // sort() {
-  //   if (this.queryString.sort) {
-  //     const sortBy = this.queryString.sort.split(",").join(" ");
-  //     this.query = this.query.sort(sortBy);
-  //   }
-
-  //   return this;
-  // }
   sort() {
     if (this.queryString.sort) {
       let sortBy;
