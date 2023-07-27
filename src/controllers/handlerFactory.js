@@ -51,13 +51,21 @@ export const createOne = (Model) =>
 // Accepts a Model and returns a function that accepts a req, res, next and performs the get operation using model._id and sends the response to the client.
 export const getOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    const projectId = req.header.projectid;
+    if (!projectId)
+      return next(new AppError("Please provide a valid project id", 400));
+
     const { id, appType } = req.params;
-    const query = Model.findOne({ _id: id, appType });
+    const query = Model.findOne({ _id: id, appType, projectId }).populate(
+      "posts"
+    );
     const features = new APIFeatures(query, req.query)
       .filter()
       .sort()
       .limitFields()
-      .paginate();
+      .paginate()
+      .search();
+
     const doc = await features.query;
 
     if (!doc) {

@@ -10,7 +10,7 @@ import AppError from "../utils/AppError.js";
 // import all the models
 import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
-import product from "../models/productModel.js";
+import Product from "../models/productModel.js";
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ const router = express.Router();
 const models = {
   user: User,
   post: Post,
-  product: product,
+  product: Product,
 };
 
 // creating a controller methods object which will contain all the controller methods for a particular model and then we will pass this object to the route handlers so that we can use the controller methods in the route handlers to perform the CRUD operations on the model passed in the url params.

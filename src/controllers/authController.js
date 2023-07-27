@@ -1,7 +1,7 @@
 import User from "../models/userModel.js";
 import catchAsync from "../utils/catchAsync.js";
 import AppError from "../utils/AppError.js";
-import { AppTypeEnum } from "../utils/enums.js";
+import { AppTypeEnum, GenratedByEnum } from "../utils/enums.js";
 import { generateToken } from "../utils/generateToken.js";
 import { sendToken } from "../utils/sendToken.js";
 import { sendEmail } from "../utils/sendEmail.js";
@@ -14,12 +14,10 @@ import { generateResetPasswordTemplate } from "../utils/generateResetPasswordTem
 // import { generateVerifyEmailToken } from "../utils/generateVerifyEmailToken.js";
 
 export const signup = catchAsync(async (req, res, next) => {
-  console.log("signup");
-  const { name, email, password } = req.body;
+  const { name, email, password, projectId } = req.body;
   // check if user exists in db already with email address provided in req.body return response with user already exists
-  let user = await User.findOne({ email });
-  console.log(user);
-  if (user) {
+  let user = await User.findOne({ email, projectId });
+  if (user && user.projectId === req.header.projectid) {
     return res.status(403).json({
       status: "fail",
       message: "User already exists",
@@ -31,18 +29,19 @@ export const signup = catchAsync(async (req, res, next) => {
     name,
     email,
     password: hashedPassword,
+    genratedBy: GenratedByEnum.USER,
+    projectId,
   });
   const token = generateToken(user._id);
   sendToken(user, 201, res, token);
 });
 export const login = catchAsync(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { email, password, projectId } = req.body;
   // check if email and password exsist
   if (!email || !password)
     return next(new AppError("please provide email and password", 400));
   // check if user exits and passord is correct
-  const user = await User.findOne({ email }).select("+password");
-
+  const user = await User.findOne({ email, projectId }).select("+password");
   if (!user || !(await user.comparePassword(password, user.password)))
     return next(new AppError("Incorrect EmailId or Password", 401));
 

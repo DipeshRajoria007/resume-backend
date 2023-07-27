@@ -13,6 +13,7 @@ import xss from "xss-clean";
 import hpp from "hpp";
 import postRouter from "./routes/postRoutes.js";
 import router from "./routes/router.js";
+import checkProjectId from "./middlewares/checkProjectId.js";
 
 // Handle uncaught exceptions
 process.on("uncaughtException", (err) => {
@@ -60,6 +61,8 @@ app.use(express.urlencoded({ extended: true }));
 // Serving static files
 // app.use(express.static(`${__dirname}/public`));
 
+// checking if the request is coming with a valid ProjectId
+// app.use(checkProjectId);
 // Routes
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/", router);
