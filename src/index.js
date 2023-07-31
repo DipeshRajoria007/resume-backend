@@ -62,7 +62,7 @@ app.use(express.urlencoded({ extended: true }));
 // app.use(express.static(`${__dirname}/public`));
 
 // checking if the request is coming with a valid ProjectId
-// app.use(checkProjectId);
+app.use(checkProjectId);
 // Routes
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/", router);

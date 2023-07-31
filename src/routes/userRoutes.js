@@ -6,20 +6,23 @@ import { AppTypeEnum } from "../utils/enums.js";
 import { protect } from "../middlewares/authMiddleware.js";
 import { restrictTo } from "../middlewares/restrictToMiddleware.js";
 import checkProjectId from "../middlewares/checkProjectId.js";
+import { upload } from "../utils/s3Upload.js";
 
 const userRouter = express.Router();
 
-userRouter.post("/signup", checkProjectId, authController.signup);
-userRouter.post("/login", checkProjectId, authController.login);
+// userRouter.route("")
+userRouter.post("/signup", authController.signup);
+userRouter.post("/login", authController.login);
 userRouter.post("/forgotPassword", authController.forgotPassword);
 // userRouter.patch("/resetPassword/:token", authController.resetPassword);
-userRouter.patch(
-  "/updateMyPassword",
-  checkProjectId,
-  protect,
-  authController.updatePassword
-);
+userRouter.patch("/updateMyPassword", protect, authController.updatePassword);
 userRouter.patch("/updateMe", checkProjectId, protect, userController.updateMe);
+userRouter.patch(
+  "/updateProfileImage",
+  protect,
+  upload.single("profileImage"),
+  userController.updateProfileImage
+);
 userRouter.delete(
   "/deleteMe",
   checkProjectId,

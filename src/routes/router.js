@@ -11,6 +11,7 @@ import AppError from "../utils/AppError.js";
 import User from "../models/userModel.js";
 import Post from "../models/postModel.js";
 import Product from "../models/productModel.js";
+import { upload } from "../utils/s3Upload.js";
 
 const router = express.Router();
 
@@ -43,12 +44,16 @@ router.param("model", (req, res, next, model) => {
 router
   .route("/:appType/:model")
   .get((req, res, next) => req.controllerMethods.getAll(req, res, next))
-  .post((req, res, next) => req.controllerMethods.createOne(req, res, next));
+  .post(upload.array("images"), (req, res, next) =>
+    req.controllerMethods.createOne(req, res, next)
+  );
 
 router
   .route("/:appType/:model/:id")
   .get((req, res, next) => req.controllerMethods.getOne(req, res, next))
-  .patch((req, res, next) => req.controllerMethods.updateOne(req, res, next))
+  .patch(upload.array("images"), (req, res, next) =>
+    req.controllerMethods.updateOne(req, res, next)
+  )
   .delete((req, res, next) => req.controllerMethods.deleteOne(req, res, next));
 
 export default router;

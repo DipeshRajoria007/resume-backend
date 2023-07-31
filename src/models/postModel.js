@@ -11,8 +11,12 @@ const PostSchema = new mongoose.Schema(
     },
     text: {
       type: String,
-      required: true,
     },
+    images: [
+      {
+        type: String,
+      },
+    ],
     likes: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,10 +28,10 @@ const PostSchema = new mongoose.Schema(
         user: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
+          required: true,
         },
         text: {
           type: String,
-          required: true,
         },
         date: {
           type: Date,

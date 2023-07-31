@@ -2,7 +2,7 @@
 import nodemailer from "nodemailer";
 import { generateResetPasswordTemplate } from "./generateResetPasswordTemplate.js";
 import { generateVerifyEmailTemplate } from "./generateVerifyEmailTemplate.js";
-
+// import S3 from "aws-sdk/clients";
 export const sendEmail = async (options) => {
   // 1) Create a transporter
   const transporter = nodemailer.createTransport({

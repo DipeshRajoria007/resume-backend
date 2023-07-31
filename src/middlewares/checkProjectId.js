@@ -5,7 +5,11 @@ import AppError from "../utils/AppError.js";
 const checkProjectId = (req, res, next) => {
   const projectId = req.headers.projectid;
   if (!projectId) {
-    return next(new AppError(`Invalid project id`, 400));
+    // return next(new AppError(`Invalid project id`, 400));
+    return res.status(400).json({
+      status: "error",
+      message: "Invalid project id",
+    });
   }
   req.body.projectId = projectId;
   next();

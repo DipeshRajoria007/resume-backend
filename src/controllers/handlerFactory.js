@@ -19,6 +19,10 @@ export const deleteOne = (Model) =>
 // Accepts a Model and returns a function that accepts a req, res, next and performs the update operation on the Model and sends the response to the client.
 export const updateOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    if (Model === "Post" || "Product") {
+      const images = req.files.map((file) => file.location);
+      req.body.images = images;
+    }
     const doc = await Model.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,
@@ -39,6 +43,17 @@ export const updateOne = (Model) =>
 // Accepts a Model and returns a function that accepts a req, res, next and performs the create operation on the Model and sends the response to the client.
 export const createOne = (Model) =>
   catchAsync(async (req, res, next) => {
+    const appType = req.params.appType;
+    if (Model === "Post" || "Product") {
+      const images = req.files.map((file) => file.location);
+      console.log({ images });
+
+      const doc = await Model.create({ ...req.body, images, appType });
+      return res.status(201).json({
+        status: "success",
+        data: doc,
+      });
+    }
     const doc = await Model.create(req.body);
     res.status(201).json({
       status: "success",

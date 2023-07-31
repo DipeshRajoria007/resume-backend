@@ -17,6 +17,7 @@ export const getAllUsers = catchAsync(async (req, res, next) => {
 
 export const getUser = getOne(User);
 
+// updateMe - update the current user data
 export const updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user tries to update their password
   if (req.body.password || req.body.passwordConfirm) {
@@ -52,6 +53,31 @@ export const updateMe = catchAsync(async (req, res, next) => {
   });
 });
 
+// updateProfileImage - update the current user profile image (AWS S3)
+export const updateProfileImage = catchAsync(async (req, res, next) => {
+  const profileImage = req.file.location;
+  if (!req.file.location) {
+    return next(new AppError("Please provide an image", 400));
+  }
+
+  // Update user profile image
+  const user = await User.findByIdAndUpdate(
+    req.user.id,
+    { profileImage }, // the file's location on S3 is saved in the user's profileImage field
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+
+  res.status(200).json({
+    status: "success",
+    data: {
+      user,
+    },
+  });
+});
+
 //deleteMe
 export const deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { isDeleted: true });
@@ -74,4 +100,5 @@ export default {
   updateMe,
   deleteMe,
   createUser,
+  updateProfileImage,
 };
